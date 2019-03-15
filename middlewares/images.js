@@ -7,6 +7,7 @@ const CLOUD_BUCKET = process.env.CLOUD_BUCKET
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT,
   keyFilename: process.env.KEYFILE_PATH
+  
 })
 
 const bucket = storage.bucket(CLOUD_BUCKET)
@@ -20,13 +21,14 @@ const sendUploadToGCS = (req, res, next) => {
     return next()
   }
 
-  const gcsname = Date.now() + req.file.originalname
+  const gcsname = Date.now() + req.file.originalname + '.png'
   const file = bucket.file(gcsname)
 
   const stream = file.createWriteStream({
     metadata: {
       contentType: req.file.mimetype
-    }
+    },
+    resumable: false
   })
 
   stream.on('error', (err) => {

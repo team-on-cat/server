@@ -9,7 +9,7 @@ const cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-let db_connect = 'mongodb://localhost/teamoncat';
+let db_connect = process.env.MONGODB_ATLAS;
 mongoose.connect(db_connect, { useNewUrlParser: true });
 mongoose.connection.once('open', () => console.log('Database connected')).on('error', (error) => console.log('connection error:', error));
 
